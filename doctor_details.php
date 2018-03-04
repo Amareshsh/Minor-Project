@@ -1,7 +1,5 @@
 <html>
-
 <head>
-
 <title>Webconstant Prototype</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -91,6 +89,5 @@ function viewdetails(){
     <button type="button" id="buttons" class="btn btn-default" onclick="enter_pres()">Submit</button>
     <p id="details"> </p>
   </form>
-
   </body>
   </html>
