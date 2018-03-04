@@ -1,0 +1,32 @@
+1) Patient_entry
+
+CREATE TABLE `webconsultant`.`patient_entry` ( `p_id` INT(11) NOT NULL AUTO_INCREMENT , `fullname` VARCHAR(40) NOT NULL , `age` INT(5) NOT NULL , `gender` VARCHAR(10) NOT NULL , `district` VARCHAR(40) NOT NULL , `occupation` VARCHAR(40) NOT NULL  , `phone_no` VARCHAR(20) NULL , PRIMARY KEY (`p_id`)) ENGINE = InnoDB;
+
+ALTER TABLE `patient_entry` ADD UNIQUE(`p_id`);
+
+
+2) Appointment_details
+
+CREATE TABLE `webconsultant`.`appointment_details` ( `a_id` INT(11) NOT NULL AUTO_INCREMENT , `p_id` INT(11) NOT NULL , `appt_date` DATE NOT NULL , `taken_date` DATETIME NOT NULL , PRIMARY KEY (`a_id`)) ENGINE = InnoDB;
+
+ALTER TABLE `appointment_details` ADD UNIQUE(`a_id`);
+
+ALTER TABLE `appointment_details` ADD CONSTRAINT `foregin_pid` FOREIGN KEY (`p_id`) REFERENCES `patient_entry`(`p_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+3) Prescription_details
+
+CREATE TABLE `webconsultant`.`prescription_details` ( `a_id` INT(11) NOT NULL , `prescription` TEXT NOT NULL , `symptoms` TEXT NOT NULL , `disorder` VARCHAR(255) NOT NULL ) ENGINE = InnoDB;
+
+ALTER TABLE `prescription_details` ADD CONSTRAINT `foregin_key2` FOREIGN KEY (`a_id`) REFERENCES `appointment_details`(`a_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+4) Next_visit
+
+CREATE TABLE `webconsultant`.`next_visit` ( `a_id` INT(11) NOT NULL , `next_date` DATE NOT NULL ) ENGINE = InnoDB;
+
+ALTER TABLE `next_visit` ADD CONSTRAINT `foregin_key4` FOREIGN KEY (`a_id`) REFERENCES `prescription_details`(`a_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+Insert the values in tables
+
+1)INSERT INTO `patient_entry`(`fullname`, `age`, `gender`, `district`, `occupation`, `phone_no`) VALUES ('amaresh',12,'male','gulbarga','student','9901179441');
+2)INSERT INTO `appointment_details`(`p_id`, `appt_date`, `taken_date`) VALUES (1,'2015/04/25','2015/04/25 14:30:00');
