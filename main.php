@@ -275,41 +275,8 @@ span.psw {
     }
 }
 </style>
-
-<script>
-function logindoc() {
-  alert("this is doctor");
-}
-
-function loginpat(){
-  alert("this is patient");
-}
-function loginrec(){
-  alert("this is receptionist");
-}
-
-function testapp(){
- var userField = document.getElementById('userField').value;
- var passField = document.getElementById('passField').value;
-
- if(!isNaN(userField) && !isNaN(passField)){
-   alert("enter the Username!!");
- }else{
-   if(userField == 'doctor'){
-     window.location.replace("http://localhost/webproject/doctor_details.php");
-   }else{
-     window.location.replace("http://localhost/webproject/replogin.php");
-   }
-
-   }
- }
-</script>
-
-
-
 </head>
 <body>
-
 
 <div class="jumbotron text-center">
  <h1>Webconsultant</h1>
@@ -324,12 +291,9 @@ function testapp(){
  </form>
 </div>
 
-
-
-
 <div class="container-fluid text-center bg-grey" id="login">
-  <h2>Login</h2>
-  <h4>Choose the roll to login:</h4>
+  <h2>Sign up/ Login</h2>
+  <h4>Choose the roll to login or create new user:</h4>
   <div class="row text-center">
     <div class="col-sm-4">
       <div class="thumbnail">
@@ -347,9 +311,9 @@ function testapp(){
     </div>
     <div class="col-sm-4">
       <div class="thumbnail">
-        <img src="patient.jpg" alt="Patient" onclick="document.getElementById('id01').style.display='block'">
-        <p><strong>Patient</strong></p>
-        <p>Person suffering from disorder</p>
+        <img src="user.png" alt="Create user" onclick="document.getElementById('id02').style.display='block'">
+        <p><strong>Create New User</strong></p>
+        <p>User may be docotor or receptionist</p>
       </div>
     </div>
 </div>
@@ -452,11 +416,10 @@ marker.setMap(map);
 </nav>
 
 <div id="id01" class="modal">
-
   <form class="modal-content animate" action="/action_page.php">
     <div class="imgcontainer">
+      <h4 for="uname"><b>Enter login credential of existing user</b></h4>
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-      <img src="img_avatar2.png" alt="Avatar" class="avatar">
     </div>
 
     <div class="containers">
@@ -471,13 +434,99 @@ marker.setMap(map);
         <input type="checkbox" checked="checked" name="remember"> Remember me
       </label>
     </div>
+  </form>
+</div>
 
-    <div class="containers" style="background-color:#f1f1f1">
-      <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-      <span class="psw">Forgot <a href="#">password?</a></span>
+<script>
+
+function testapp(){
+  var userField = document.getElementById('userField').value;
+  var passField = document.getElementById('passField').value;
+  var types = 'logindetails';
+  if(!isNaN(userField) && !isNaN(passField)){
+    alert("username or password is empty!!");
+  }else{
+    $.post('enter_appointment.php',{uname:userField,upass:passField,type:types},
+    function (data) {
+      if(data == 'doctor'){
+        location.href = 'doctor_details.php';
+      }else if (data == 'receptionist') {
+        location.href = 'replogin.php';
+      }else{
+        alert(data);
+      }
+    });
+    }
+ }
+</script>
+
+
+<div id="id02" class="modal">
+  <form class="modal-content animate"  >
+    <div class="imgcontainer">
+      <h4 for="uname"><b>Enter User Details To Signup:</b></h4>
+      <span onclick="document.getElementById('id02').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="containers" align="left">
+      <label for="uname"><b>Username</b></label>
+      <input type="text" id="userFields" placeholder="Enter Username" name="uname" required>
+
+      <label for="email"><b>Email Id</b></label>
+      <input type="text" id="emailFields" placeholder="Enter Email Id" name="uname" required>
+
+      <label for="psw"><b>Password</b></label>
+      <input type="password" id="passFields" placeholder="Enter Password" name="psw" required>
+
+      <label for="psw"><b>Re-enter Password</b></label>
+      <input type="password" id="passrFields" placeholder="Re-enter Password" name="psw" required>
+
+        <label for="gender">User Type:
+          <div class="radio">
+          <label class="radio-inline">
+            <input type="radio" id="gdoctor" name="optradio">Doctor
+          </label>
+          <label class="radio-inline">
+            <input type="radio" id="grep" name="optradio">Receptionist
+          </label>
+          </div>
+          </label>
+      <button type="button" id="submitField" onclick="enteruser()">Create User</button>
     </div>
   </form>
 </div>
+
+<script>
+function enteruser(){
+  var username = document.getElementById('userFields').value;
+  var password = document.getElementById('passFields').value;
+  var spassword = document.getElementById('passrFields').value;
+  var email = document.getElementById('emailFields').value;
+  var utype = getuser();
+  var types = 'userdetails';
+  if(password == spassword){
+    $.post('enter_appointment.php',{uname:username,upass:password,uemail:email,utype:utype,type:types},
+    function (data) {
+      alert(data);
+    });
+  }else{
+    alert('please reenter the correct password');
+  }
+}
+
+function getuser(){
+  var gValue;
+  if(document.getElementById('gdoctor').checked)
+  {
+    gValue = "doctor";
+  }else if (document.getElementById('grep').checked) {
+    gValue = "receptionist";
+  }else {
+    return null;
+  }
+  return gValue;
+}
+</script>
 
 
 <script>

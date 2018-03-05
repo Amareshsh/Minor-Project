@@ -88,6 +88,41 @@ elseif($type == 'enter'){
 }
 }
 
+elseif($type == 'userdetails'){
+  $uname = $_POST['uname'];
+  $password = $_POST['upass'];
+  $email = $_POST['uemail'];
+  $utype = $_POST['utype'];
+
+  $query = "INSERT INTO `user_details`(`username`, `email_id`, `password`, `user_type`)
+   VALUES ('$uname','$email','$password','$utype');";
+
+   if ($newdb->query($query) === TRUE) {
+     $last_id = $newdb->insert_id;
+     echo "Successfully created with-- " . $last_id;
+ } else {
+     echo "Username ".$uname." already exists.Choose another";
+ }
+
+}
+
+elseif($type == 'logindetails'){
+  $uname = $_POST['uname'];
+  $password = $_POST['upass'];
+
+  $query = "SELECT `user_type` FROM `user_details` WHERE username = '$uname' AND password = '$password'; ";
+  $result = mysqli_query($newdb,$query);
+
+  if(mysqli_num_rows($result)>0){
+    while($row = mysqli_fetch_assoc($result)){
+      echo $row["user_type"];
+    }
+  }else{
+    echo "error";
+  }
+
+}
+
 
 
 
